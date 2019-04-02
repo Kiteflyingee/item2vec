@@ -25,7 +25,7 @@ def process_data(data_file, sep='\t', test_ratio=0.2):
     print("num of train:", len(df_train))
     print("num of test:", len(df_test))
     pickle.dump((df_train, df_test), 
-                    file='train_test.pkl')
+                    file=open('train_test.pkl','wb'))
     return df_train, df_test
 
 
@@ -73,5 +73,6 @@ def rating_splitter_item(df):
 if __name__ == "__main__":
     data_path = r'./data/ml/u.data'
     df_train, df_test = process_data(data_path)
-    item_users_map = rating_splitter(df_train)
+    # item_users_map = rating_splitter(df_train)
+    user_item_map = rating_splitter_item(df_train)
 

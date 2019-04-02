@@ -89,8 +89,7 @@ def scores_at_m (model, test_buy, recommend_buy, topn=10):
     f1 = 2/((1/precision_at_m)+(1/recall_at_m))
     return [precision_at_m, recall_at_m, f1]
 
-if __name__ == "__main__":
-
+def train_user_vector():
     data_path = r'./data/ml/u.data'
     df_train, df_test = process_data.process_data(data_path)
     item_users_map = process_data.rating_splitter(df_train)
@@ -111,4 +110,32 @@ if __name__ == "__main__":
                         negative = 5,
                         window = 9999999)
     print("Time passed: " + str(datetime.datetime.now()-start))
+    model_w2v_sg.save('user2vec')
+
+
+def train_item_vector():
+    data_path = r'./data/ml/u.data'
+    df_train, df_test = process_data.process_data(data_path)
+    user_items_map = process_data.rating_splitter_item(df_train)
+    userids, item_sequence = zip(*user_items_map)
+    item_sequence = list(item_sequence)
+    shuffle_data(item_sequence)
+
+    start = datetime.datetime.now()
+    print("start word2vec train...")
+    
+    model_w2v_sg = Word2Vec(sentences = item_sequence,
+                        iter = 50000, # epoch
+                        min_count = 3, # a user has to appear more than 3 times to be keeped
+                        size = 300, # size of the hidden layer
+                        workers = 12, # specify the number of threads to be used for training
+                        sg = 1,
+                        hs = 0,
+                        negative = 5,
+                        window = 9999999)
+    print("Time passed: " + str(datetime.datetime.now()-start))
     model_w2v_sg.save('item2vec')
+
+if __name__ == "__main__":
+
+    train_item_vector()
