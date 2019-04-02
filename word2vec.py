@@ -100,6 +100,7 @@ if __name__ == "__main__":
 
     start = datetime.datetime.now()
     print("start word2vec train...")
+    
     model_w2v_sg = Word2Vec(sentences = user_sequence,
                         iter = 50000, # epoch
                         min_count = 3, # a user has to appear more than 3 times to be keeped
