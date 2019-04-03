@@ -62,12 +62,12 @@ def rating_splitter_item(df):
     # df['like'] = np.where(df['rating'] > limit, 1, 0)
     # 以喜欢和item id给数据分组
     # group_user_like = df.groupby(['like', 'iid'])
-    group_user = df.groupby('iid')
+    group_item = df.groupby('uid')
     # 这块需要转换为str,方便word2vec操作
     df['iid'] = df['iid'].astype('str')
     # 把每个user的item集合穿回去
-    return [(gp, group_user.get_group(gp)['iid'].tolist())
-            for gp in group_user.groups]
+    return [(gp, group_item.get_group(gp)['iid'].tolist())
+            for gp in group_item.groups]
 
 
 if __name__ == "__main__":

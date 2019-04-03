@@ -64,7 +64,7 @@ def itemCF_recommender(model, positive_list=None, negative_list=None,topN=10):
     most_similar_list = model.wv.most_similar_cosmul(positive=positive_list, negative=negative_list, topn=topN)
     for iid, prob in most_similar_list:
         recommend_list.append(iid)
-        logging.log(iid, prob)
+        logging.info("与{}相似的为{},相似性:{}".format(positive_list[0], iid, prob))
     return recommend_list
 
 
