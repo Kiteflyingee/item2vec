@@ -113,9 +113,7 @@ def train_user_vector():
     model_w2v_sg.save('user2vec')
 
 
-def train_item_vector():
-    data_path = r'./data/ml/u.data'
-    df_train, df_test = process_data.process_data(data_path)
+def train_item_vector(df_train):
     user_items_map = process_data.rating_splitter_item(df_train)
     userids, item_sequence = zip(*user_items_map)
     item_sequence = list(item_sequence)
@@ -137,5 +135,8 @@ def train_item_vector():
     model_w2v_sg.save('item2vec')
 
 if __name__ == "__main__":
-
-    train_item_vector()
+    # 切分数据集
+    data_path = r'./data/ml/u.data'
+    df_train, df_test = process_data.process_data(data_path)
+    # 训练item词向量
+    train_item_vector(df_train)
