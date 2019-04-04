@@ -55,17 +55,17 @@ def userCF_recommender(model, train, userid, k=10, topN=10):
 
 
 # make itemCF Recommender，当训练的是item2vec才有用
-def itemCF_recommender(model, positive_list=None, negative_list=None,topN=10):
+def itemCF_recommender(model, positive_list=None, negative_list=None,k=10):
     '''
     用作itemcf时候，当且仅当word2vec三训练的item2vec
     '''
-    recommend_list = []
-
-    most_similar_list = model.wv.most_similar_cosmul(positive=positive_list, negative=negative_list, topn=topN)
+    sim_item_list = []
+#   找出最相似的k个用户
+    most_similar_list = model.wv.most_similar_cosmul(positive=positive_list, negative=negative_list, topn=k)
     for iid, prob in most_similar_list:
-        recommend_list.append(iid)
+        sim_item_list.append((iid, prob))
         logging.info("与{}相似的为{},相似性:{}".format(positive_list[0], iid, prob))
-    return recommend_list
+    return sim_item_list
 
 
 def scores_at_m (model, test_buy, recommend_buy, topn=10):
@@ -81,7 +81,7 @@ def scores_at_m (model, test_buy, recommend_buy, topn=10):
 
     for userid in common_users:
         current_test_set = set(test_buy[userid])
-        pred = [pred_result[0] for pred_result in model.wv.most_similar_cosmul(positive = recommend_buy[userid], topn=topn)]
+        pred = recommend_buy[userid]
         sum_correct += len(set(pred).intersection(current_test_set))
         sum_liked += len(current_test_set)
     precision_at_m = sum_correct/(topn*len(common_users))
@@ -123,7 +123,7 @@ def train_item_vector(df_train):
     print("start word2vec train...")
     
     model_w2v_sg = Word2Vec(sentences = item_sequence,
-                        iter = 50000, # epoch
+                        iter = 10, # epoch
                         min_count = 3, # a user has to appear more than 3 times to be keeped
                         size = 300, # size of the hidden layer
                         workers = 12, # specify the number of threads to be used for training
