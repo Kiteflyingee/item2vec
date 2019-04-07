@@ -9,7 +9,7 @@ import pickle
 TOPN = 10
 model = Word2Vec.load(r"./item2vec")
 df_train, df_test = pickle.load(open('train_test.pkl','rb'))
-user_itemslist = rating_splitter(df_train)
+user_itemslist = rating_splitter_item(df_train)
 users , itemlist = zip(*user_itemslist)
 itemslist = list(itemlist)
 del itemlist

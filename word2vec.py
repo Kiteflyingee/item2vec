@@ -89,9 +89,10 @@ def scores_at_m (model, test_buy, recommend_buy, topn=10):
     f1 = 2/((1/precision_at_m)+(1/recall_at_m))
     return [precision_at_m, recall_at_m, f1]
 
-def train_user_vector():
+def train_user_vector(df_train):
     data_path = r'./data/ml/u.data'
-    df_train, df_test = process_data.process_data(data_path)
+    # 不能在切分数据集了
+    # df_train, df_test = process_data.process_data(data_path)
     item_users_map = process_data.rating_splitter(df_train)
     itemids, user_sequence = zip(*item_users_map)
     user_sequence = list(user_sequence)
